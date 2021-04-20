@@ -3,24 +3,28 @@
 class Chessboard
 {
 	private:
-		Piece* White[8];
-		Piece* Black[8];
+        // Allocated pieces for the chessboard.
+		Piece* WhitePieces_[16];
+		Piece* BlackPieces_[16];
 
         // The board will be made up of Piece pointers.
-		Piece* board[8][8];
+		Piece* board_[8][8];
+        Color aiColor_;
 
-		void initializeBoard(); // TODO(fleyva): implement
+		void initializeBoard();
 		void clearBoard();
-		Piece* set(int row, int col, int name, int color);
-		Piece* move_piece(int oldrow, int oldcol, int newrow, int newcol);
+		void setPiece(int row, int col, Piece *piece);
+		Piece* movePiece(int oldrow, int oldcol, int newrow, int newcol);
 
 	public:
-		int is_white();
-	    void resetBoard();
+	    void setBoardUp();
 		void init();
-		Piece* set_piece(int row, int col, int name, int color);
-		Piece* move(int oldrow, int oldcol, int newrow, int newcol);
+		bool isWhite();
+
+        Piece* pieceAt(int row, int col);
+		Piece* makeMove(int oldrow, int oldcol, int newrow, int newcol);
+
 		ChessBoard* copy();
-		void free_board();
-	    ChessBoard();
+		void freeBoard();
+	    ChessBoard(Color aiColor);
 };
