@@ -1,13 +1,8 @@
-#include <vector>
 #include "minimax.h"
 #include "piece_moves.h"
 #include "board_pieces.h"
 
 using namespace std;
-
-vector<move_t> getPieceMoves(Chessboard board, Piece *p, int8_t rank, int8_t file) {
-
-}
 
 vector<move_t> allMoves(Chessboard board, Color color) {
     // - vector<move_t> result
@@ -31,7 +26,11 @@ vector<move_t> allMoves(Chessboard board, Color color) {
     return all_moves;
 }
 
-move_t minimaxProcess(int board, move_t move, int depth, bool maximizing_player) {
+float evaluateBoard(Chessboard board, Color color) {
+
+}
+
+move_t minimaxProcess(Chessboard board, move_t move, int depth, bool maximizing_player, Color color) {
     // if (depth == 0):
     //      - return move
     // if (maximizing_player):
@@ -47,10 +46,28 @@ move_t minimaxProcess(int board, move_t move, int depth, bool maximizing_player)
     // return move
 
     if (depth == 0) {
+        float score = evaluateBoard(board, color, move); 
+        move.score = score;
         return move;
     }
 
-    if (maximizing_player) {
-        move_t best_move;
+    move_t best_move = move;
+    vector<move_t> all_moves = allMoves(board, color);
+
+    for (vector<move_t>::iterator it = all_moves.begin(); it != all_moves.end(); it++) {
+
+        Chessboard adjusted_board = *board.copy();
+        move_t new_move = createMove(it->rank_source, it->file_source, it->rank_dest, it->file_dest);
+        adjusted_board.makeMove(it->rank_source, it->file_source, it->rank_dest, it->file_dest);
+
+        move_t curr_move = minimaxProcess(adjusted_board, new_move, depth-1, !maximizing_player, color);
+        
+        if (maximizing_player && (curr_move.score > best_move.score)) {
+            best_move = curr_move;
+        } else if (!maximizing_player && (curr_move.score < best_move.score)) {
+            best_move = curr_move;
+        }
     }
+    
+    return best_move;
 }

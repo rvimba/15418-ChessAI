@@ -9,11 +9,12 @@ struct move_header {
     int8_t file_source;
     int8_t rank_dest;
     int8_t file_dest;
+    float score;
 };
 typedef struct move_header move_t;
-// typedef move_struct* move_t;
 
-move_t createMove(int8_t r_source, int8_t f_source, int8_t r_dest, int8_t f_dest);
+
+vector<move_t> getPieceMoves(Chessboard board, Piece *p, int8_t rank, int8_t file);
 
 vector<move_t> pawnMoves(Chessboard b, Color color, int8_t rank, int8_t file);
 vector<move_t> knightMoves(Chessboard b, Color color, int8_t rank, int8_t file);
@@ -27,3 +28,5 @@ void checkPawnMoves(Chessboard b, vector<move_t> moves, Color color, int8_t rank
 
 void checkKnightMove(Chessboard b, vector<move_t> moves, Color color, 
                     int8_t rank, int8_t file, int8_t new_rank, int8_t new_file);
+
+move_t createMove(int8_t r_source, int8_t f_source, int8_t r_dest, int8_t f_dest);

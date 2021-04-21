@@ -11,14 +11,33 @@
 // 7 [b_r, b_n, b_b, b_q, b_k, b_b, b_n, b_r]
 
 
-
-move_t createMove(int8_t r_source, int8_t f_source, int8_t r_dest, int8_t f_dest) {
-    move_t new_move;
-    new_move.rank_source = r_source;
-    new_move.file_source = f_source;
-    new_move.rank_dest = r_dest;
-    new_move.file_dest = f_dest;
-    return new_move;
+vector<move_t> getPieceMoves(Chessboard board, Piece *p, int8_t rank, int8_t file) {
+    vector<move_t> moves;
+    if (p == nullptr) {
+        return moves;
+    }
+    switch(p->getPieceType()) {
+        case Pawn:
+            moves = pawnMoves(board, p->getPieceColor(), rank, file);
+            break;
+        case Knight:
+            moves = knightMoves(board, p->getPieceColor(), rank, file);
+            break;
+        case Bishop:
+            moves = bishopMoves(board, p->getPieceColor(), rank, file);
+            break;
+        case Rook:
+            moves = rookMoves(board, p->getPieceColor(), rank, file);
+            break;
+        case Queen:
+            moves = queekMoves(board, p->getPieceColor(), rank, file);
+            break;
+        case King:
+            moves = kingMoves(board, p->getPieceColor(), rank, file);
+            break;
+        default:
+    }
+    return moves;
 }
 
 vector<move_t> pawnMoves(Chessboard b, Color color, int8_t rank, int8_t file) {
@@ -65,7 +84,7 @@ vector<move_t> knightMoves(Chessboard board, Color color, int8_t rank, int8_t fi
             }
         }
     }
-    
+
     return moves;
 }
 
@@ -189,4 +208,13 @@ int checkMove(Chessboard b, vector<move_t> moves, Color color,
         moves.push_back(createMove(rank, file, new_rank, new_file));
         return 0;
     }
+}
+
+move_t createMove(int8_t r_source, int8_t f_source, int8_t r_dest, int8_t f_dest) {
+    move_t new_move;
+    new_move.rank_source = r_source;
+    new_move.file_source = f_source;
+    new_move.rank_dest = r_dest;
+    new_move.file_dest = f_dest;
+    return new_move;
 }
