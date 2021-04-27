@@ -35,7 +35,7 @@ class Chessboard
 		bool isWhite();
 
         Piece* pieceAt(int row, int col);
-		Piece* makeMove(int oldrow, int oldcol, int newrow, int newcol);
+		Piece* makeMove(move_t move);
 
 		Chessboard* copy();
 		void freeBoard();

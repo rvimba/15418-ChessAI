@@ -58,7 +58,7 @@ move_t minimaxProcess(Chessboard board, move_t move, int depth, bool maximizing_
 
         Chessboard adjusted_board = *board.copy();
         move_t new_move = createMove(it->rank_source, it->file_source, it->rank_dest, it->file_dest);
-        adjusted_board.makeMove(it->rank_source, it->file_source, it->rank_dest, it->file_dest);
+        adjusted_board.makeMove(new_move);
 
         move_t curr_move = minimaxProcess(adjusted_board, new_move, depth-1, !maximizing_player, color);
         
@@ -68,6 +68,6 @@ move_t minimaxProcess(Chessboard board, move_t move, int depth, bool maximizing_
             best_move = curr_move;
         }
     }
-    
+
     return best_move;
 }
