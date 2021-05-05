@@ -1,27 +1,31 @@
 #include <iostream>
-#include "minimax.h"
+#include "chess_pieces.h"
+#include "chessboard.h"
 #include "piece_moves.h"
-#include "board_pieces.h"
+#include "minimax.h"
+// #include "board_pieces.h"
+#include <climits>
 
 using namespace std;
+/************************** Helper Functions ******************************/
 
-int main(int argc, char** argv) {
-    // parse arguments determining whether player wants to be white or black
-        // initialize chessboard
-        // while (game not finished)
-    //      - player makes move (user input) or AI makes move based on turn
-    // return winner
-}
 
-Chessboard nextMoveAI(Chessboard board, Color color) {
-    // use minimax to find the best move
-    // update board
-    int depth = 2;
-    move_t move = createMove(0,0,0,0);
-    move.score = INT_MIN;
-    move_t best_move = minimaxProcess(board, move, depth, true, color);
-    board.makeMove(best_move);
-    return board;
+move_t createUserMove(string piece_source, string piece_dest) {
+    move_t new_move;
+
+    new_move.file_source = (int)(piece_source[0]) - 97;
+    new_move.rank_source = (int)(piece_source[1]) - 49;
+    new_move.file_dest = (int)(piece_dest[0]) - 97;
+    new_move.rank_dest = int(piece_dest[1]) - 49;
+    new_move.score = 1;
+    
+    if (new_move.file_source < 0 || new_move.file_source > 7 || 
+        new_move.rank_source < 0 || new_move.rank_source > 7 ||
+        new_move.file_dest < 0 || new_move.file_dest > 7 ||
+        new_move.rank_dest < 0 || new_move.rank_dest > 7) {
+            new_move.score = 0;
+    } 
+    return new_move;
 }
 
 Chessboard nextMoveUser(Chessboard board, Color color) {
@@ -46,26 +50,37 @@ Chessboard nextMoveUser(Chessboard board, Color color) {
     return board;
 }
 
-move_t createUserMove(string piece_source, string piece_dest) {
-    move_t new_move;
-
-    new_move.file_source = (int)(piece_source[0]) - 97;
-    new_move.rank_source = (int)(piece_source[1]) - 49;
-    new_move.file_dest = (int)(piece_dest[0]) - 97;
-    new_move.rank_dest = int(piece_dest[1]) - 49;
-    new_move.score = 1;
-    
-    if (new_move.file_source < 0 || new_move.file_source > 7 || 
-        new_move.rank_source < 0 || new_move.rank_source > 7 ||
-        new_move.file_dest < 0 || new_move.file_dest > 7 ||
-        new_move.rank_dest < 0 || new_move.rank_dest > 7) {
-            new_move.score = 0;
-    } 
-    return new_move;
-}
-
 int translateFile(char file) {
     return (int)file - 96;
 }
 
+/*****************************************************************************/
+
+int main(int argc, char** argv) {
+    // parse arguments determining whether player wants to be white or black
+        // initialize chessboard
+        // while (game not finished)
+    //      - player makes move (user input) or AI makes move based on turn
+    // return winner
+    std::cout << "Whatcha know about Amdhal's Gambit baby? " << argc << " arguments:\n";
+ 
+    // Loop through each argument and print its number and value
+    for (int count{ 0 }; count < argc; ++count)
+    {
+        std::cout << count << ' ' << argv[count] << '\n';
+    }
+ 
+    return 0;
+}
+
+Chessboard nextMoveAI(Chessboard board, Color color) {
+    // use minimax to find the best move
+    // update board
+    int depth = 2;
+    move_t move = createMove(0,0,0,0);
+    move.score = INT_MIN;
+    move_t best_move = minimaxProcess(board, move, depth, true, color);
+    board.makeMove(best_move);
+    return board;
+}
 

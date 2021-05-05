@@ -5,11 +5,15 @@ Piece::Piece(Color color) {
 }
 
 char Piece::getSymbol() {
-	return Piece::charPieceType;
+	return Piece::charPieceType_;
+}
+
+Color Piece::getPieceColor() {
+	return Piece::color;
 }
 
 PieceType Piece::getPieceType() {
-	return Piece::pieceType;
+	return Piece::pieceType_;
 }
 
 void Piece::setPieceType(PieceType type) {

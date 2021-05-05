@@ -1,4 +1,14 @@
+#pragma once 
 #include "chess_pieces.h"
+
+struct move_header {
+    int8_t rank_source;
+    int8_t file_source;
+    int8_t rank_dest;
+    int8_t file_dest;
+    float score;
+};
+typedef struct move_header move_t;
 
 class Chessboard
 {
@@ -17,14 +27,16 @@ class Chessboard
 		Piece* movePiece(int oldrow, int oldcol, int newrow, int newcol);
 
 	public:
+	    Chessboard(Color aiColor);
+
 	    void setBoardUp();
 		void init();
 		bool isWhite();
 
         Piece* pieceAt(int row, int col);
-		Piece* makeMove(int oldrow, int oldcol, int newrow, int newcol);
+		// Piece* makeMove(int oldrow, int oldcol, int newrow, int newcol);
+		Piece* makeMove(move_t move); // TODO: Implement this
 
-		ChessBoard* copy();
+		Chessboard* copy();
 		void freeBoard();
-	    ChessBoard(Color aiColor);
 };
