@@ -11,10 +11,13 @@ private:
 	PieceType pieceType_ = PieceType::None;
 public:
 	Color color;
-	Piece(Color color);
-	virtual char getSymbol();
-	virtual Color getPieceColor();
-	virtual PieceType getPieceType();
-    virtual void setPieceType(PieceType type);
+	Piece(Color color, PieceType type);
+	~Piece();
+	char getSymbol();
+	Color getPieceColor();
+	PieceType getPieceType();
+    void setPieceType(PieceType type);
+
+	Piece* copy();
 };
 

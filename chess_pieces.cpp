@@ -1,19 +1,26 @@
 #include "chess_pieces.h"
 
-Piece::Piece(Color color) {
-	Piece::color = color;
+Piece::Piece(Color set_color, PieceType set_type) {
+	// Piece::color = color;
+    color = set_color;
+    pieceType_ = set_type;
+    setPieceType(set_type);
+}
+
+Piece::~Piece() {
+    return;
 }
 
 char Piece::getSymbol() {
-	return Piece::charPieceType_;
+	return charPieceType_;
 }
 
 Color Piece::getPieceColor() {
-	return Piece::color;
+	return color;
 }
 
 PieceType Piece::getPieceType() {
-	return Piece::pieceType_;
+	return pieceType_;
 }
 
 void Piece::setPieceType(PieceType type) {
@@ -40,4 +47,8 @@ void Piece::setPieceType(PieceType type) {
         default:
             std::cout << "Error: invalid piece type." << "\n";
     }
+}
+
+Piece* Piece::copy() {
+    return new Piece(getPieceColor(), getPieceType());
 }

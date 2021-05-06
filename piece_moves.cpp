@@ -33,7 +33,7 @@ void checkPawnMoves(Chessboard b, std::vector<move_t> moves, Color color, int8_t
             moves.push_back(createMove(rank, file, new_rank_1, new_file_left));
         }
         if (right != nullptr && left->getPieceColor() != color) {
-            moves.push_back(createMove(rank, file, new_rank_1, new_file_left));
+            moves.push_back(createMove(rank, file, new_rank_1, new_file_right));
         }
     }
 }
@@ -152,7 +152,7 @@ std::vector<move_t> queenMoves(Chessboard b, Color color, int8_t rank, int8_t fi
 
 std::vector<move_t> kingMoves(Chessboard b, Color color, int8_t rank, int8_t file) {
     std::vector<move_t> moves;
-    int8_t new_rank, new_file, rank_delta, file_delta, result;
+    int8_t new_rank, new_file;
 
     for (new_rank = -1; new_rank < 2; new_rank += 1) {
         for (new_file = -1; new_file < 2; new_file += 1) {
@@ -194,4 +194,31 @@ std::vector<move_t> getPieceMoves(Chessboard board, Piece *p, int8_t rank, int8_
             break;
     }
     return moves;
+}
+
+move_t createMove(int8_t r_source, int8_t f_source, int8_t r_dest, int8_t f_dest) {
+    move_t new_move;
+    new_move.rank_source = r_source;
+    new_move.file_source = f_source;
+    new_move.rank_dest = r_dest;
+    new_move.file_dest = f_dest;
+    return new_move;
+}
+
+int checkMove(Chessboard b, vector<move_t> moves, Color color, 
+                    int8_t rank, int8_t file, int8_t new_rank, int8_t new_file) {
+    
+    if (new_rank < 0 || new_rank > 7 || new_file < 0 || new_file > 7) {
+        return 0;
+    }
+
+    Piece *check_square = b.pieceAt(new_rank, new_file);
+    if (check_square == nullptr) {
+        moves.push_back(createMove(rank, file, new_rank, new_file));
+        return 1;
+    } else if (check_square->getPieceColor() != color) {
+        moves.push_back(createMove(rank, file, new_rank, new_file));
+        return 0;
+    }
+    return 0; // TODO: is it 
 }

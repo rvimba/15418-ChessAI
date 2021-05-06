@@ -44,7 +44,7 @@ move_t minimaxProcess(Chessboard board, move_t move, int depth, bool maximizing_
     // return move
 
     if (depth == 0) {
-        float score = evaluateBoard(board, color, move); 
+        float score = evaluateBoard(board, color); 
         move.score = score;
         return move;
     }

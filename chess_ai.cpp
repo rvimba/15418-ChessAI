@@ -1,10 +1,10 @@
 #include <iostream>
-#include "chess_pieces.h"
-#include "chessboard.h"
-#include "piece_moves.h"
+#include <climits>
+// #include "chess_pieces.h"
+// #include "chessboard.h"
+// #include "piece_moves.h"
 #include "minimax.h"
 // #include "board_pieces.h"
-#include <climits>
 
 using namespace std;
 /************************** Helper Functions ******************************/
