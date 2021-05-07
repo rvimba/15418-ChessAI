@@ -115,10 +115,10 @@ bool Chessboard::isWhite()
 	return (aiColor_ == Color::White);
 }
 
-void Chessboard::setPiece(int row, int col, PieceType newType)
-{
-    board_[row][col]->setPieceType(newType);
-};
+// void Chessboard::setPiece(int row, int col, PieceType newType)
+// {
+//     board_[row][col]->setPieceType(newType);
+// };
 
 Piece* Chessboard::movePiece(int oldRow, int oldCol, int newRow, int newCol)
 {
@@ -180,6 +180,29 @@ void Chessboard::freeBoard()
             }
         }
     }
+}
+
+void Chessboard::printBoard() {
+    string board_rep = "";
+    board_rep += "    A B C D E F G H \n";
+    board_rep += "    _______________ \n";
+
+    for (int i = 7; i >= 0; --i) {
+        board_rep += to_string(i + 1) + " | "; 
+        for (int j = 0; j < 8; ++j) {
+            Piece* p = pieceAt(i, j);
+            if (p == nullptr) {
+                board_rep += "- ";
+            } else {
+                board_rep += p->getSymbol() + " ";
+            }
+        }
+        board_rep += "|\n";
+        // cout << next_line << endl;
+    }
+    board_rep += "    _______________\n";
+    // cout << "    _______________" << endl;
+    cout << board_rep << endl;
 }
 
 Chessboard::Chessboard(Color aiColor) {

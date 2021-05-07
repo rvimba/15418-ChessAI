@@ -24,7 +24,7 @@ class Chessboard
 
 		// void initializeBoard();
 		void clearBoard();
-		void setPiece(int row, int col, PieceType newType);
+		// void setPiece(int row, int col, PieceType newType);
 		Piece* movePiece(int oldrow, int oldcol, int newrow, int newcol);
 
 	public:
@@ -41,4 +41,5 @@ class Chessboard
 
 		Chessboard* copy();
 		void freeBoard();
+		void printBoard();
 };

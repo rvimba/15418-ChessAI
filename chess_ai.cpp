@@ -6,7 +6,6 @@
 #include "minimax.h"
 // #include "board_pieces.h"
 
-using namespace std;
 /************************** Helper Functions ******************************/
 
 
@@ -69,7 +68,16 @@ int main(int argc, char** argv) {
     {
         std::cout << count << ' ' << argv[count] << '\n';
     }
- 
+
+    string player_color = argv[2];
+    Color ai_color = Color::Black;
+    if (player_color == "black") {
+        ai_color = Color::White;
+    }
+
+    Chessboard* b = new Chessboard(ai_color);
+    b->printBoard();
+
     return 0;
 }
 
