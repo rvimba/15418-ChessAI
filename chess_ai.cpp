@@ -55,6 +55,17 @@ int translateFile(char file) {
 
 /*****************************************************************************/
 
+void nextMoveAI(Chessboard *board, Color color) {
+    // use minimax to find the best move
+    // update board
+    int depth = 2;
+    move_t move = createMove(0,0,0,0);
+    move.score = INT_MIN;
+    move_t best_move = minimaxProcess(board, move, depth, true, color);
+    board->makeMove(best_move);
+    // return board;
+}
+
 int main(int argc, char** argv) {
     // parse arguments determining whether player wants to be white or black
         // initialize chessboard
@@ -69,26 +80,27 @@ int main(int argc, char** argv) {
         std::cout << count << ' ' << argv[count] << '\n';
     }
 
-    string player_color = argv[2];
+    std::string input = " ";
+    std::cout << "Choose your color: 'white' or 'black'?\n";
+    std::cin >> input;
+
+    // string player_color = argv[2];
     Color ai_color = Color::Black;
-    if (player_color == "black") {
-        ai_color = Color::White;
+    if (input == "black") {
+        // If ai is white, then let it make the first move.
+        ai_color = Color::White;        
     }
 
     Chessboard* b = new Chessboard(ai_color);
+    if (ai_color == Color::White) {
+        nextMoveAI(b, ai_color);
+    }
     b->printBoard();
+    
+    while ((input != "exit") && (input != "")) {
+                
+    }
 
     return 0;
-}
-
-Chessboard nextMoveAI(Chessboard board, Color color) {
-    // use minimax to find the best move
-    // update board
-    int depth = 2;
-    move_t move = createMove(0,0,0,0);
-    move.score = INT_MIN;
-    move_t best_move = minimaxProcess(board, move, depth, true, color);
-    board.makeMove(best_move);
-    return board;
 }
 

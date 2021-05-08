@@ -9,6 +9,7 @@ vector<move_t> allMoves(Chessboard board, Color color) {
     //          - append all possible moves from that piece to our result vector
     // return result
     vector<move_t> all_moves;
+
     for (int8_t rank = 0; rank < 8; rank++) {
         for (int8_t file = 0; file < 8; file++) {
             Piece *piece = board.pieceAt(rank, file);
@@ -25,10 +26,27 @@ vector<move_t> allMoves(Chessboard board, Color color) {
 }
 
 float evaluateBoard(Chessboard board, Color color) {
-    return 0.0f;
+    int score = 0;
+    int opponent_score = 0;
+    for (int row = 0; row < 8; row++) {
+        for (int col = 0; col < 8; col++) {
+            Piece* p = board.pieceAt(row, col);
+            if (p != nullptr) {
+                if (p->getPieceColor() == color) {
+                    score += p->getValue();
+                } else {
+                    opponent_score += p->getValue();
+                }
+            }
+        }
+    }
+    Color opponent_color = (color == Color::White) ? Color::Black : Color::White;
+    score += allMoves(board, color).size() * 10;
+    opponent_score += allMoves(board, opponent_color).size() * 10;
+    return (float)(score - opponent_score);
 }
 
-move_t minimaxProcess(Chessboard board, move_t move, int depth, bool maximizing_player, Color color) {
+move_t minimaxProcess(Chessboard *board, move_t move, int depth, bool maximizing_player, Color color) {
     // if (depth == 0):
     //      - return move
     // if (maximizing_player):

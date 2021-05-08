@@ -24,7 +24,7 @@ class Chessboard
 
 		// void initializeBoard();
 		void clearBoard();
-		// void setPiece(int row, int col, PieceType newType);
+		void setPiece(int row, int col, PieceType newType, Color color);
 		Piece* movePiece(int oldrow, int oldcol, int newrow, int newcol);
 
 	public:
@@ -36,8 +36,7 @@ class Chessboard
 		bool isWhite();
 
         Piece* pieceAt(int row, int col);
-		// Piece* makeMove(int oldrow, int oldcol, int newrow, int newcol);
-		Piece* makeMove(move_t move); // TODO: Implement this
+		Piece* makeMove(move_t move);
 
 		Chessboard* copy();
 		void freeBoard();

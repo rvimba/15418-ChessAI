@@ -11,6 +11,10 @@ Piece::~Piece() {
     return;
 }
 
+int Piece::getValue() {
+	return scoreValue_;
+}
+
 string Piece::getSymbol() {
 	return charPieceType_;
 }
@@ -28,21 +32,27 @@ void Piece::setPieceType(PieceType type, Color color) {
     switch (type) {
         case PieceType::Pawn:
             charPieceType_ = (color == Color::White) ? 'P' : 'p';
+            scoreValue_ = 100;
             break;
         case PieceType::Bishop:
             charPieceType_ = (color == Color::White) ? 'B' : 'b';
+            scoreValue_ = 350;
             break;
         case PieceType::Knight:
             charPieceType_ = (color == Color::White) ? 'N' : 'n';
+            scoreValue_ = 350;
             break;
         case PieceType::Rook:
             charPieceType_ = (color == Color::White) ? 'R' : 'r';
+            scoreValue_ = 525;
             break;
         case PieceType::King:
             charPieceType_ = (color == Color::White) ? 'K' : 'k';
+            scoreValue_ = 10000;
             break;
         case PieceType::Queen:
             charPieceType_ = (color == Color::White) ? 'Q' : 'q';
+            scoreValue_ = 1000;
             break;
         default:
             std::cout << "Error: invalid piece type." << "\n";
