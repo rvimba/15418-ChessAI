@@ -2,7 +2,7 @@
 #include <vector>
 #include "piece_moves.h"
 
-//     0 , 1  , 2  , 3  , 4  , 5  , 6  , 7  
+//     0 , 1  , 2  , 3  , 4  , 5  , 6  , 7   files
 // 0 [w_r, w_n, w_b, w_q, q_k, w_b, w_n, w_r]
 // 1 [w_p, w_p, w_p, w_p, w_p, w_p, w_p, w_p]
 // 2 [   ,    ,    ,    ,    ,    ,    ,    ]
@@ -11,8 +11,9 @@
 // 5 [   ,    ,    ,    ,    ,    ,    ,    ]
 // 6 [b_p, b_p, b_p, b_p, b_p, b_p, b_p, b_p]
 // 7 [b_r, b_n, b_b, b_q, b_k, b_b, b_n, b_r]
+// ranks 
 
-void checkPawnMoves(Chessboard* b, std::vector<move_t> moves, Color color, int8_t rank, int8_t file, Piece *forward_1, 
+void checkPawnMoves(Chessboard* b, std::vector<move_t> &moves, Color color, int8_t rank, int8_t file, Piece *forward_1, 
                     Piece *forward_2, Piece *left, Piece *right, int8_t new_rank_1, int8_t new_rank_2) {
     
     int8_t new_file_left = file - 1;
@@ -32,7 +33,7 @@ void checkPawnMoves(Chessboard* b, std::vector<move_t> moves, Color color, int8_
         if (left != nullptr && left->getPieceColor() != color) {
             moves.push_back(createMove(rank, file, new_rank_1, new_file_left));
         }
-        if (right != nullptr && left->getPieceColor() != color) {
+        if (right != nullptr && right->getPieceColor() != color) {
             moves.push_back(createMove(rank, file, new_rank_1, new_file_right));
         }
     }
@@ -69,20 +70,22 @@ std::vector<move_t> pawnMoves(Chessboard* b, Color color, int8_t rank, int8_t fi
 
 std::vector<move_t> knightMoves(Chessboard* board, Color color, int8_t rank, int8_t file) {
     std::vector<move_t> moves;
-    int8_t new_rank, new_file;
-
-    for (new_rank = -2; new_rank < 3; new_rank += 1) {
-        if (new_rank == -2 || new_rank == 2) {
-            for (new_file = -1; new_file < 2; new_file += 2) {
+    int8_t new_rank, new_file, rank_delta, file_delta;
+    for (rank_delta = -2; rank_delta < 3; rank_delta += 1) {
+        if (rank_delta == -2 || rank_delta == 2) {
+            for (file_delta = -1; file_delta < 2; file_delta += 2) {
+                new_rank = rank + rank_delta;
+                new_file = file + file_delta;
                 checkMove(board, moves, color, rank, file, new_rank, new_file);
             }
-        } else if (new_rank == -1 || new_rank == 1) {
-            for (new_file = -2; new_file < 3; new_file += 4) {
+        } else if (rank_delta == -1 || rank_delta == 1) {
+            for (file_delta = -2; file_delta < 3; file_delta += 4) {
+                new_rank = rank + rank_delta;
+                new_file = file + file_delta;
                 checkMove(board, moves, color, rank, file, new_rank, new_file);
             }
         }
     }
-
     return moves;
 }
 
@@ -110,7 +113,6 @@ std::vector<move_t> rookMoves(Chessboard* b, Color color, int8_t rank, int8_t fi
     int8_t new_rank, new_file, rank_delta, file_delta, result;
 
     for (rank_delta = -1; rank_delta < 2; rank_delta += 2) {
-        file_delta = 0;
         new_rank = rank;
         new_file = file;
         result = 1;
@@ -121,7 +123,6 @@ std::vector<move_t> rookMoves(Chessboard* b, Color color, int8_t rank, int8_t fi
     }
 
     for (file_delta = -1; file_delta < 2; file_delta += 2) {
-        rank_delta = 0;
         new_rank = rank;
         new_file = file;
         result = 1;
@@ -159,7 +160,7 @@ std::vector<move_t> kingMoves(Chessboard* b, Color color, int8_t rank, int8_t fi
             if (new_rank == 0 && new_file == 0) {
                 continue;
             }
-            checkMove(b, &moves, color, rank, file, new_rank, new_file);
+            checkMove(b, moves, color, rank, file, new_rank, new_file);
         }
     }
     return moves;
@@ -220,5 +221,5 @@ int checkMove(Chessboard* b, vector<move_t> &moves, Color color,
         moves.push_back(createMove(rank, file, new_rank, new_file));
         return 0;
     }
-    return 0; // TODO: is it 
+    return 0; 
 }

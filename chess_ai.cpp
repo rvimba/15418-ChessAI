@@ -27,7 +27,7 @@ move_t createUserMove(string piece_source, string piece_dest) {
     return new_move;
 }
 
-Chessboard nextMoveUser(Chessboard board, Color color) {
+void nextMoveUser(Chessboard *board, Color color) {
     // ask for user input to move piece
     // current rank and file of source, new rank and file of destination
     // verify valid move
@@ -43,10 +43,11 @@ Chessboard nextMoveUser(Chessboard board, Color color) {
     if (move.score == 0) {
         // invalid move
         cout << "invalid move. Try again" << endl;
-        return nextMoveUser(board, color);
+        nextMoveUser(board, color);
+        return;
     }
-    board.makeMove(move);
-    return board;
+    board->makeMove(move);
+    return;
 }
 
 int translateFile(char file) {
@@ -60,8 +61,10 @@ void nextMoveAI(Chessboard *board, Color color) {
     // update board
     int depth = 2;
     move_t move = createMove(0,0,0,0);
+    cout << "passed createMove" << endl;
     move.score = INT_MIN;
     move_t best_move = minimaxProcess(board, move, depth, true, color);
+    cout << "passed minimax." << endl;
     board->makeMove(best_move);
     // return board;
 }
@@ -86,9 +89,11 @@ int main(int argc, char** argv) {
 
     // string player_color = argv[2];
     Color ai_color = Color::Black;
+    Color player_color = Color::White;
     if (input == "black") {
         // If ai is white, then let it make the first move.
         ai_color = Color::White;        
+        player_color = Color::Black;        
     }
 
     Chessboard* b = new Chessboard(ai_color);
@@ -97,8 +102,10 @@ int main(int argc, char** argv) {
     }
     b->printBoard();
     
-    while ((input != "exit") && (input != "")) {
-                
+    while (true) {
+        nextMoveUser(b, player_color);
+        nextMoveAI(b, ai_color);
+        b->printBoard();
     }
 
     return 0;

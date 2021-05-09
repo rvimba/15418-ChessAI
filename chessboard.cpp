@@ -91,13 +91,14 @@ Piece* Chessboard::pieceAt(int row, int col) {
 
 Chessboard* Chessboard::copy()
 {
-	// TODO(Fleyva): add copy fxn
     Chessboard *b = new Chessboard(aiColor_);
     for (int i  = 0; i < 8; i++) {
         for (int j = 0; j < 8; j++) {
             Piece* p = board_[i][j];
             if (p != nullptr) {
                 b->board_[i][j] = p->copy();
+            } else {
+                b->board_[i][j] = nullptr;
             }
         }
     }
@@ -106,10 +107,6 @@ Chessboard* Chessboard::copy()
 
 void Chessboard::freeBoard()
 {
-    // for (int i = 0; i < 16; i++) {
-    //     delete WhitePieces_[i];
-    //     delete BlackPieces_[i];
-    // }
     for (int i  = 0; i < 8; i++) {
         for (int j = 0; j < 8; j++) {
             if (board_[i][j] != nullptr) {
