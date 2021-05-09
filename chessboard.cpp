@@ -76,7 +76,7 @@ Piece* Chessboard::makeMove(move_t move)
         (p->getPieceColor() == Color::Black)) {
 
         setPiece(move.rank_dest, move.file_dest, PieceType::Queen, Color::Black);
-    }
+    } 
     return pieceAt(move.rank_dest, move.file_dest);
 }
 

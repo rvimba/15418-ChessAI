@@ -9,13 +9,13 @@
 /************************** Helper Functions ******************************/
 
 
-move_t createUserMove(string piece_source, string piece_dest) {
+move_t createUserMove(string source_dest) {
     move_t new_move;
 
-    new_move.file_source = (int)(piece_source[0]) - 97;
-    new_move.rank_source = (int)(piece_source[1]) - 49;
-    new_move.file_dest = (int)(piece_dest[0]) - 97;
-    new_move.rank_dest = int(piece_dest[1]) - 49;
+    new_move.file_source = (int)(source_dest[0]) - 97;
+    new_move.rank_source = (int)(source_dest[1]) - 49;
+    new_move.file_dest = (int)(source_dest[2]) - 97;
+    new_move.rank_dest = int(source_dest[3]) - 49;
     new_move.score = 1;
     
     if (new_move.file_source < 0 || new_move.file_source > 7 || 
@@ -32,14 +32,17 @@ void nextMoveUser(Chessboard *board, Color color) {
     // current rank and file of source, new rank and file of destination
     // verify valid move
     // update board 
-    string piece_source, piece_dest;
+    string source_dest;
     
-    cout << "Enter current rank and file of piece to move" << endl;
-    cin >> piece_source;
-    cout << "Enter destination rank and file for piece" << endl;
-    cin >> piece_dest;
+    // cout << "Enter current rank and file of piece to move" << endl;
+    // cin >> piece_source;
+    // cout << "Enter destination rank and file for piece" << endl;
+    // cin >> piece_dest;
+    // example: a2a3
+    cout << "Enter rank/file source, rank/file destination: ";
+    cin >> source_dest;
 
-    move_t move = createUserMove(piece_source, piece_dest);
+    move_t move = createUserMove(source_dest);
     if (move.score == 0) {
         // invalid move
         cout << "invalid move. Try again" << endl;
@@ -65,6 +68,7 @@ void nextMoveAI(Chessboard *board, Color color) {
     move.score = INT_MIN;
     move_t best_move = minimaxProcess(board, move, depth, true, color);
     cout << "passed minimax." << endl;
+    cout << "move made: " << (int)(best_move.file_source) << (int)(best_move.rank_source) << " " << (int)(best_move.file_dest) << (int) (best_move.rank_dest) << endl;
     board->makeMove(best_move);
     // return board;
 }
