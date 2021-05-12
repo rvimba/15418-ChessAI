@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <omp.h>
 
 // #include "chess_pieces.h"
 // #include "chessboard.h"

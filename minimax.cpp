@@ -86,9 +86,12 @@ move_t minimaxProcess(Chessboard *board, move_t move, int depth, bool maximizing
 
     vector<move_t> all_moves = allMoves(board, color);
     if (depth == 1) {
+        
+        #pragma omp critical
         number_of_moves += all_moves.size();
     }
 
+    #pragma omp for 
     for (vector<move_t>::iterator it = all_moves.begin(); it != all_moves.end(); it++) {
 
         Chessboard* adjusted_board = board->copy();
