@@ -4,6 +4,7 @@
         "__nullptr": "cpp",
         "iostream": "cpp",
         "string": "cpp",
-        "type_traits": "cpp"
+        "type_traits": "cpp",
+        "chrono": "cpp"
     }
 }

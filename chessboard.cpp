@@ -38,6 +38,58 @@ void Chessboard::setupBoard() {
 
 }
 
+void Chessboard::setupBoard(const char *game_position) {
+    for (int row = 0; row < 8; row++) {
+        for (int col = 0; col < 8; col++) {
+            char square = game_position[row*8 + col];
+            switch(square) {
+                case '-':
+                    board_[row][col] = nullptr;
+                    break;
+                case 'p':
+                    board_[row][col] = new Piece(Color::Black, PieceType::Pawn);
+                    break;
+                case 'n':
+                    board_[row][col] = new Piece(Color::Black, PieceType::Knight);
+                    break;
+                case 'b':
+                    board_[row][col] = new Piece(Color::Black, PieceType::Bishop);
+                    break;
+                case 'r':
+                    board_[row][col] = new Piece(Color::Black, PieceType::Rook);
+                    break;
+                case 'q':
+                    board_[row][col] = new Piece(Color::Black, PieceType::Queen);
+                    break;
+                case 'k':
+                    board_[row][col] = new Piece(Color::Black, PieceType::King);
+                    break;
+                case 'P':
+                    board_[row][col] = new Piece(Color::White, PieceType::Pawn);
+                    break;
+                case 'N':
+                    board_[row][col] = new Piece(Color::White, PieceType::Knight);
+                    break;
+                case 'B':
+                    board_[row][col] = new Piece(Color::White, PieceType::Bishop);
+                    break;
+                case 'R':
+                    board_[row][col] = new Piece(Color::White, PieceType::Rook);
+                    break;
+                case 'Q':
+                    board_[row][col] = new Piece(Color::White, PieceType::Queen);
+                    break;
+                case 'K':
+                    board_[row][col] = new Piece(Color::White, PieceType::King);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+}
+
+
 bool Chessboard::isWhite()
 {
 	return (aiColor_ == Color::White);
@@ -143,4 +195,9 @@ bool Chessboard::printBoard() {
 Chessboard::Chessboard(Color aiColor) {
     aiColor_ = aiColor;
     setupBoard();
+}
+
+Chessboard::Chessboard(Color aiColor, char const * game_position) {
+    aiColor_ = aiColor;
+    setupBoard(game_position);
 }

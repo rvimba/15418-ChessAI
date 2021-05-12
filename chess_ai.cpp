@@ -1,4 +1,6 @@
 #include <iostream>
+// #include <stdio.h>
+// #include <stdlib.h>
 #include <climits>
 // #include "chess_pieces.h"
 // #include "chessboard.h"
@@ -6,8 +8,44 @@
 #include "minimax.h"
 // #include "board_pieces.h"
 
+
+#include <chrono>
+using namespace std::chrono;
+
 /************************** Helper Functions ******************************/
 
+// midgame #1 deepblue (white) vs Kasparov (black) board
+const char board1[] = {   '-','-','R','-','-','-','K','-',
+                    '-','-','-','-','-','P','P','-',
+                    'P','P','-','-','-','-','-','P',
+                    '-','-','-','p','-','-','-','-',
+                    '-','N','Q','-','-','p','-','-',
+                    '-','-','n','-','-','q','-','-',
+                    '-','p','-','-','-','p','-','p',
+                    '-','-','-','-','-','-','r','k'};
+
+
+const char startBoard[] = {'R','N','B','Q','K','B','N','R',
+                    'P','P','P','P','P','P','P','P',
+                    '-','-','-','-','-','-','-','-',
+                    '-','-','-','-','-','-','-','-',
+                    '-','-','-','-','-','-','-','-',
+                    '-','-','-','-','-','-','-','-',
+                    'p','p','p','p','p','p','p','p',
+                    'r','n','b','q','k','b','n','r'};
+
+// char getTestBoard (int boardNumber)[] {
+//     switch (boardNumber) {
+//         case 1: 
+//             return board1;
+//         case 2: 
+//             return 0;
+//         case 3:
+//             return 0;
+//         default:
+//             return startBoard;
+//     }
+// }
 
 move_t createUserMove(string source_dest) {
     move_t new_move;
@@ -50,7 +88,6 @@ void nextMoveUser(Chessboard *board, Color color) {
         return;
     }
     board->makeMove(move);
-    return;
 }
 
 int translateFile(char file) {
@@ -62,12 +99,19 @@ int translateFile(char file) {
 void nextMoveAI(Chessboard *board, Color color) {
     // use minimax to find the best move
     // update board
-    int depth = 3;
+    int depth = 4;
     move_t move = createMove(0,0,0,0);
     cout << "passed createMove" << endl;
     move.score = INT_MIN;
-    move_t best_move = minimaxProcess(board, move, depth, true, color);
-    cout << "passed minimax." << endl;
+    
+    auto start = high_resolution_clock::now();
+    move_t best_move = findNextMove(board, move, depth, true, color);
+    auto stop = high_resolution_clock::now();
+
+    auto durationOfFunction = duration_cast<microseconds>(stop - start);
+    cout << "minimax duration: " << durationOfFunction.count() << "ms at depth: " << depth << endl;
+
+    // move_t best_move = ABMinMax(board, move, depth, color);
 
     char file_source = best_move.file_source + 97;
     char rank_source = best_move.rank_source + 49;
@@ -77,6 +121,58 @@ void nextMoveAI(Chessboard *board, Color color) {
     cout << "move made: " << file_source << rank_source << file_dest << rank_dest << ": " << best_move.score << endl;
     board->makeMove(best_move);
     // return board;
+}
+
+void runTestBoard() {
+
+    std::string input = " ";
+    std::cout << "Choose your color: 'white' or 'black'?\n";
+    std::cin >> input;
+
+    // string player_color = argv[2];
+    Color ai_color = Color::Black;
+    Color player_color = Color::White;
+    if (input == "black") {
+        // If ai is white, then let it make the first move.
+        ai_color = Color::White;        
+        player_color = Color::Black;        
+    }
+
+    char buffer[256];
+    std::cout << "Choose test board number [1, 10]\n";
+    std::cin >> buffer;
+    int boardNumber = atoi(buffer);
+    
+    Chessboard* b;
+    if (boardNumber == 1) {
+        b = new Chessboard(ai_color, board1);
+    } else {
+        b = new Chessboard(ai_color, startBoard);
+    }
+    
+    // odd turn   ==> user moves
+    // even turns ==> ai moves
+    b->printBoard();
+
+    std::string whoseTurn = " ";
+    std::cout << "Is it your turn? yes/no\n";
+    std::cin >> whoseTurn;
+    
+    int turn = (whoseTurn == "yes") ? 1 : 0;
+
+    while (true) {
+        if (turn & 0x1) {
+            nextMoveUser(b, player_color);
+        } else {
+            nextMoveAI(b, ai_color);
+        }
+        if (!b->printBoard()) { // printBoard returns true if 2 kings alive
+            string whoWon = (turn & 0x1) ? "User Won" : "AI Won";
+            cout << "Game Over: " << whoWon << endl;
+            return;
+        }
+        turn++;
+    }
 }
 
 int main(int argc, char** argv) {
@@ -92,6 +188,16 @@ int main(int argc, char** argv) {
     {
         std::cout << count << ' ' << argv[count] << '\n';
     }
+
+    std::string test = " ";
+    std::cout << "Start from existing board ?\n";
+    std::cin >> test;
+
+    if (test == "yes") {
+        runTestBoard();
+        return 0;
+    }
+
 
     std::string input = " ";
     std::cout << "Choose your color: 'white' or 'black'?\n";

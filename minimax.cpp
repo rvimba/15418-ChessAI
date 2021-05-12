@@ -2,6 +2,8 @@
 
 using namespace std;
 
+int number_of_moves = 0;
+
 vector<move_t> allMoves(Chessboard* board, Color color) {
     // - vector<move_t> result
     // - for each square on the board
@@ -22,7 +24,6 @@ vector<move_t> allMoves(Chessboard* board, Color color) {
                 for (vector<move_t>::iterator it = piece_moves.begin(); it != piece_moves.end(); it++) {
                     all_moves.push_back(*it);
                 }
-                // all_moves.insert(end(all_moves), begin(piece_moves), end(piece_moves));
             }
         }
     }
@@ -45,6 +46,7 @@ float evaluateBoard(Chessboard* board, Color color, bool maximizing_player) {
         }
     }
     
+    // POSITIONAL SCORES MAY NOT BE AS IMPORTANT PAST EARLY GAME
     Color opponent_color = (color == Color::White) ? Color::Black : Color::White;
     score += allMoves(board, color).size() * 10;
     opponent_score += allMoves(board, opponent_color).size() * 10;
@@ -83,15 +85,9 @@ move_t minimaxProcess(Chessboard *board, move_t move, int depth, bool maximizing
     }
 
     vector<move_t> all_moves = allMoves(board, color);
-    /*for (vector<move_t>::iterator it = all_moves.begin(); it != all_moves.end(); it++) {
-        Piece *p = board->pieceAt(it->file_source, it->rank_source);
-        if (p == nullptr) 
-            continue;
-        if (p->getPieceType() == PieceType::Knight) {
-            cout << "Dest: " << (int)it->file_dest << (int)it->rank_dest << endl;
-        }
-    }*/
-
+    if (depth == 1) {
+        number_of_moves += all_moves.size();
+    }
 
     for (vector<move_t>::iterator it = all_moves.begin(); it != all_moves.end(); it++) {
 
@@ -102,6 +98,15 @@ move_t minimaxProcess(Chessboard *board, move_t move, int depth, bool maximizing
 
         move_t curr_move = minimaxProcess(adjusted_board, new_move, depth-1, !maximizing_player, switch_color);
 
+        // if (depth == 4) {
+        //     char file_source = new_move.file_source + 97;
+        //     char rank_source = new_move.rank_source + 49;
+        //     char file_dest = new_move.file_dest + 97;
+        //     char rank_dest = new_move.rank_dest + 49;
+
+        //     cout << file_source << rank_source << file_dest << rank_dest << ": " << curr_move.score << endl;
+        // }
+
         if (maximizing_player && (curr_move.score > best_move.score)) {
             best_move = new_move;
             best_move.score = curr_move.score;
@@ -111,5 +116,102 @@ move_t minimaxProcess(Chessboard *board, move_t move, int depth, bool maximizing
         }
     }
     
+    return best_move;
+}
+
+
+move_t ABMinMax(Chessboard* board, move_t move, short int depth, Color color) {
+	return ABMaxMove(board, move, depth, (int)0, (int)0, color);
+}
+
+move_t ABMaxMove(Chessboard* board, move_t move, short int depth, int a, int b, Color color) {
+
+    move_t best_move;
+    move_t best_real_move;
+    bool is_best_move_set = false;
+
+	int alpha = a, beta = b;
+
+	if (depth == 0) {//if depth limit is reached
+        cout << "In the base case baby." << endl;
+        float score = evaluateBoard(board, color, true); 
+        move.score = score;
+        return move;
+	} else {
+        vector<move_t> all_moves = allMoves(board, color);
+        number_of_moves += all_moves.size();
+
+		for (vector<move_t>::iterator it = all_moves.begin(); it != all_moves.end(); it++) {
+            Chessboard* adjusted_board = board->copy();
+            move_t new_move = createMove(it->rank_source, it->file_source, it->rank_dest, it->file_dest);
+            adjusted_board->makeMove(new_move);
+			
+            move_t curr_move = ABMinMove(adjusted_board, new_move, depth-1, alpha, beta, color);
+
+            if (depth == 2) {
+                char file_source = curr_move.file_source + 97;
+                char rank_source = curr_move.rank_source + 49;
+                char file_dest = curr_move.file_dest + 97;
+                char rank_dest = curr_move.rank_dest + 49;
+
+                cout << file_source << rank_source << file_dest << rank_dest << ": " << curr_move.score << endl;
+            }
+			
+            if (!is_best_move_set || curr_move.score > best_move.score) {
+				best_move = curr_move;
+                best_real_move = new_move;
+                alpha = curr_move.score;
+                is_best_move_set = true;
+			}
+            
+			if(beta > alpha){
+                cout << "BEta > alpha" << endl;
+				return best_real_move;
+			}
+		}
+		return best_real_move;
+	}
+}
+
+move_t ABMinMove(Chessboard* board, move_t move, short int depth, int a, int b, Color color) {
+	
+    move_t best_move;
+    move_t best_real_move;
+    bool is_best_move_set = false;
+
+	int alpha = a, beta = b;
+
+	if (depth == 0) {
+        float score = evaluateBoard(board, color, false); 
+        move.score = score;
+        return move;
+	} else {
+        vector<move_t> all_moves = allMoves(board, color);
+        for (vector<move_t>::iterator it = all_moves.begin(); it != all_moves.end(); it++) {
+            Chessboard* adjusted_board = board->copy();
+            move_t new_move = createMove(it->rank_source, it->file_source, it->rank_dest, it->file_dest);
+            adjusted_board->makeMove(new_move);
+			
+			move_t curr_move = ABMaxMove(adjusted_board, new_move, depth-1, alpha, beta, color);
+			
+            if (!is_best_move_set || curr_move.score < best_move.score) {
+				best_move = curr_move;
+                best_real_move = new_move;
+                beta = curr_move.score;
+                is_best_move_set = true;
+			}
+            
+			if (beta < alpha){
+				return best_real_move;
+			}
+		}
+		return best_real_move;
+	}
+}
+
+move_t findNextMove(Chessboard *board, move_t move, int depth, bool maximizing_player, Color color) {
+    move_t best_move = minimaxProcess(board, move, depth, maximizing_player, color);
+
+    cout << "Total number of moves : " << number_of_moves << endl;
     return best_move;
 }

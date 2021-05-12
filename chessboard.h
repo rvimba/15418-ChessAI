@@ -29,9 +29,11 @@ class Chessboard
 
 	public:
 	    Chessboard(Color aiColor);
+		Chessboard(Color aiColor, char const * game_position);
 
 	    // void setBoardUp();
 		void setupBoard();
+		void setupBoard(const char *game_position);
 		// void init();
 		bool isWhite();
 
