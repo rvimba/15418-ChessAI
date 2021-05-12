@@ -10,7 +10,7 @@
 
 std::vector<move_t> allMoves(Chessboard* board, Color color);
 
-float evaluateBoard(Chessboard* board, Color color, move_t move);
+float evaluateBoard(Chessboard* board, Color color, bool maximizing_player);
 
 move_t minimaxProcess(Chessboard* board, move_t move, int depth, bool maximizing_player, Color color);
 

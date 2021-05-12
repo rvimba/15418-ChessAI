@@ -160,7 +160,7 @@ std::vector<move_t> kingMoves(Chessboard* b, Color color, int8_t rank, int8_t fi
             if (new_rank == 0 && new_file == 0) {
                 continue;
             }
-            checkMove(b, moves, color, rank, file, new_rank, new_file);
+            checkMove(b, moves, color, rank, file, rank+new_rank, file+new_file);
         }
     }
     return moves;

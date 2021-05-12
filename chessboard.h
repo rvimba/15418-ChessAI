@@ -40,5 +40,5 @@ class Chessboard
 
 		Chessboard* copy();
 		void freeBoard();
-		void printBoard();
+		bool printBoard();
 };

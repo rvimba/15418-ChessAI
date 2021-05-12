@@ -29,7 +29,7 @@ vector<move_t> allMoves(Chessboard* board, Color color) {
     return all_moves;
 }
 
-float evaluateBoard(Chessboard* board, Color color) {
+float evaluateBoard(Chessboard* board, Color color, bool maximizing_player) {
     int score = 0;
     int opponent_score = 0;
     for (int row = 0; row < 8; row++) {
@@ -44,10 +44,14 @@ float evaluateBoard(Chessboard* board, Color color) {
             }
         }
     }
+    
     Color opponent_color = (color == Color::White) ? Color::Black : Color::White;
     score += allMoves(board, color).size() * 10;
     opponent_score += allMoves(board, opponent_color).size() * 10;
-    return (float)(score - opponent_score);
+    if (maximizing_player) {
+        return (float)(score - opponent_score);
+    }
+    return (float)(opponent_score - score);
 }
 
 move_t minimaxProcess(Chessboard *board, move_t move, int depth, bool maximizing_player, Color color) {
@@ -66,7 +70,7 @@ move_t minimaxProcess(Chessboard *board, move_t move, int depth, bool maximizing
     // return move
 
     if (depth == 0) {
-        float score = evaluateBoard(board, color); 
+        float score = evaluateBoard(board, color, maximizing_player); 
         move.score = score;
         return move;
     }
@@ -97,6 +101,7 @@ move_t minimaxProcess(Chessboard *board, move_t move, int depth, bool maximizing
         Color switch_color = (color == Color::White) ? Color::Black : Color::White;
 
         move_t curr_move = minimaxProcess(adjusted_board, new_move, depth-1, !maximizing_player, switch_color);
+
         if (maximizing_player && (curr_move.score > best_move.score)) {
             best_move = new_move;
             best_move.score = curr_move.score;

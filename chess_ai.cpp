@@ -62,13 +62,19 @@ int translateFile(char file) {
 void nextMoveAI(Chessboard *board, Color color) {
     // use minimax to find the best move
     // update board
-    int depth = 2;
+    int depth = 3;
     move_t move = createMove(0,0,0,0);
     cout << "passed createMove" << endl;
     move.score = INT_MIN;
     move_t best_move = minimaxProcess(board, move, depth, true, color);
     cout << "passed minimax." << endl;
-    cout << "move made: " << (int)(best_move.file_source) << (int)(best_move.rank_source) << " " << (int)(best_move.file_dest) << (int) (best_move.rank_dest) << endl;
+
+    char file_source = best_move.file_source + 97;
+    char rank_source = best_move.rank_source + 49;
+    char file_dest = best_move.file_dest + 97;
+    char rank_dest = best_move.rank_dest + 49;
+
+    cout << "move made: " << file_source << rank_source << file_dest << rank_dest << ": " << best_move.score << endl;
     board->makeMove(best_move);
     // return board;
 }
@@ -101,15 +107,28 @@ int main(int argc, char** argv) {
     }
 
     Chessboard* b = new Chessboard(ai_color);
-    if (ai_color == Color::White) {
-        nextMoveAI(b, ai_color);
+    
+    // odd turn   ==> user moves
+    // even turns ==> ai moves
+    int turn = 0;
+
+    if (ai_color != Color::White) {
+        turn++;
     }
     b->printBoard();
     
     while (true) {
-        nextMoveUser(b, player_color);
-        nextMoveAI(b, ai_color);
-        b->printBoard();
+        if (turn & 0x1) {
+            nextMoveUser(b, player_color);
+        } else {
+            nextMoveAI(b, ai_color);
+        }
+        if (!b->printBoard()) { // printBoard returns true if 2 kings alive
+            string whoWon = (turn & 0x1) ? "User Won" : "AI Won";
+            cout << "Game Over: " << whoWon << endl;
+            return 0;
+        }
+        turn++;
     }
 
     return 0;

@@ -84,11 +84,6 @@ Piece* Chessboard::pieceAt(int row, int col) {
     return board_[row][col];
 }
 
-// void Chessboard::init()
-// {
-// 	initializeBoard();
-// }
-
 Chessboard* Chessboard::copy()
 {
     Chessboard *b = new Chessboard(aiColor_);
@@ -116,10 +111,11 @@ void Chessboard::freeBoard()
     }
 }
 
-void Chessboard::printBoard() {
+bool Chessboard::printBoard() {
     string board_rep = "";
     board_rep += "    A B C D E F G H \n";
     board_rep += "    _______________ \n";
+    int king_count = 0;
 
     for (int i = 7; i >= 0; --i) {
         board_rep += to_string(i + 1) + " | "; 
@@ -129,7 +125,11 @@ void Chessboard::printBoard() {
                 board_rep += "- ";
             } else {
                 board_rep += p->getSymbol() + " ";
+                if (p->getPieceType() == PieceType::King) {
+                    king_count++;
+                }
             }
+
         }
         board_rep += "|\n";
         // cout << next_line << endl;
@@ -137,6 +137,7 @@ void Chessboard::printBoard() {
     board_rep += "    _______________\n";
     // cout << "    _______________" << endl;
     cout << board_rep << endl;
+    return (king_count == 2);
 }
 
 Chessboard::Chessboard(Color aiColor) {
