@@ -14,6 +14,15 @@
 using namespace std::chrono;
 
 /************************** Helper Functions ******************************/
+const char black_board[] = {'-','-','-','-','-','-','-','-',
+                            '-','-','-','-','-','-','-','-',
+                            '-','-','-','-','-','-','-','-',
+                            '-','-','-','-','-','-','-','-',
+                            '-','-','-','-','-','-','-','-',
+                            '-','-','-','-','-','-','-','-',
+                            '-','-','-','-','-','-','-','-',
+                            '-','-','-','-','-','-','-','-'};
+
 
 // midgame #1 deepblue (white) vs Kasparov (black) board
 const char board1[] = {   '-','-','R','-','-','-','K','-',
@@ -33,6 +42,25 @@ const char board2[] = {     '-','-','-','-','-','-','-','-',
                             '-','-','-','-','-','p','-','-',
                             '-','-','-','-','-','-','p','-',
                             '-','-','-','-','-','-','-','-',
+                            '-','-','-','-','-','-','k','-'};
+
+// Paul Morphy's problem - age 9
+const char board3[] = {     'R','-','-','-','-','-','-','-',
+                            '-','-','-','-','-','-','-','-',
+                            '-','-','-','-','-','-','-','-',
+                            '-','-','-','-','-','-','-','-',
+                            '-','-','-','-','-','-','-','-',
+                            '-','P','-','-','-','-','-','-',
+                            'p','p','-','-','-','-','-','-',
+                            'k','b','K','-','-','-','-','-'};
+
+const char board4[] = {     '-','-','-','R','-','-','-','K',
+                            'P','P','r','-','-','-','-','-',
+                            'Q','-','-','-','-','-','-','P',
+                            '-','-','-','-','-','q','-','-',
+                            'p','-','-','-','-','N','p','-',
+                            '-','p','-','-','-','-','-','p',
+                            '-','-','-','-','-','p','-','-',
                             '-','-','-','-','-','-','k','-'};
 
 const char startBoard[] = {'R','N','B','Q','K','B','N','R',
@@ -109,7 +137,7 @@ int translateFile(char file) {
 void nextMoveAI(Chessboard *board, Color color) {
     // use minimax to find the best move
     // update board
-    int depth = 4;
+    int depth = 5;
     move_t move = createMove(0,0,0,0);
     cout << "passed createMove" << endl;
     move.score = INT_MIN;
@@ -158,6 +186,10 @@ void runTestBoard() {
         b = new Chessboard(ai_color, board1);
     } else if (boardNumber == 2) {
         b = new Chessboard(ai_color, board2);
+    } else if (boardNumber == 3) {
+        b = new Chessboard(ai_color, board3);
+    } else if (boardNumber == 4) {
+        b = new Chessboard(ai_color, board4);
     } else {
         b = new Chessboard(ai_color, startBoard);
     }

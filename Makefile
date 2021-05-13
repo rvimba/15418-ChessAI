@@ -5,6 +5,7 @@ CC = g++
 #  -g     - this flag adds debugging information to the executable file
 #  -Wall  - this flag is used to turn on most compiler warnings
 CFLAGS  = -std=c++11 -O2 -fopenmp
+SEQFLAGS = -std=c++11 -g -fopenmp
 
 chessai: chess_ai.o minimax.o piece_moves.o chessboard.o chess_pieces.o
 	$(CC) $(CFLAGS) -o chessai chess_ai.o minimax.o piece_moves.o chessboard.o chess_pieces.o

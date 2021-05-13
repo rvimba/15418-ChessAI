@@ -136,8 +136,7 @@ move_t minimaxProcess(Chessboard *board, move_t move, int depth, bool maximizing
     #pragma omp for  
     // for (vector<move_t>::iterator it = all_moves.begin(); it != all_moves.end(); it++) {
     for (int i = 0; i < all_moves.size(); i++) {
-        move_t *it;
-        *it = all_moves.at(i);
+        move_t *it = &all_moves.at(i);
         Chessboard* adjusted_board = board->copy();
         move_t new_move = createMove(it->rank_source, it->file_source, it->rank_dest, it->file_dest);
         adjusted_board->makeMove(new_move);
