@@ -5,6 +5,7 @@
 // #include "chess_pieces.h"
 // #include "chessboard.h"
 // #include "piece_moves.h"
+#include "chessboard.h"
 #include "minimax.h"
 // #include "board_pieces.h"
 
@@ -24,6 +25,15 @@ const char board1[] = {   '-','-','R','-','-','-','K','-',
                     '-','p','-','-','-','p','-','p',
                     '-','-','-','-','-','-','r','k'};
 
+// Capablanca - Marshall New York, NY USA 23 Jun 1909 
+const char board2[] = {     '-','-','-','-','-','-','-','-',
+                            '-','-','-','-','-','-','-','r',
+                            '-','-','P','-','P','-','-','-',
+                            '-','R','-','-','b','P','K','-',
+                            '-','-','-','-','-','p','-','-',
+                            '-','-','-','-','-','-','p','-',
+                            '-','-','-','-','-','-','-','-',
+                            '-','-','-','-','-','-','k','-'};
 
 const char startBoard[] = {'R','N','B','Q','K','B','N','R',
                     'P','P','P','P','P','P','P','P',
@@ -146,6 +156,8 @@ void runTestBoard() {
     Chessboard* b;
     if (boardNumber == 1) {
         b = new Chessboard(ai_color, board1);
+    } else if (boardNumber == 2) {
+        b = new Chessboard(ai_color, board2);
     } else {
         b = new Chessboard(ai_color, startBoard);
     }
