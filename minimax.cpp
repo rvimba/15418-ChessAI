@@ -134,25 +134,28 @@ move_t minimaxProcess(Chessboard *board, move_t move, int depth, bool maximizing
     }
 
     #pragma omp for  
-    for (vector<move_t>::iterator it = all_moves.begin(); it != all_moves.end(); it++) {
+    // for (vector<move_t>::iterator it = all_moves.begin(); it != all_moves.end(); it++) {
+    for (int i = 0; i < all_moves.size(); i++) {
+        move_t *it;
+        *it = all_moves.at(i);
         Chessboard* adjusted_board = board->copy();
         move_t new_move = createMove(it->rank_source, it->file_source, it->rank_dest, it->file_dest);
         adjusted_board->makeMove(new_move);
         Color switch_color = (color == Color::White) ? Color::Black : Color::White;
         move_t curr_move;
-        if (depth <= 3) {
+        if (depth <= 2) {
             curr_move = seqMinimaxProcess(adjusted_board, new_move, depth-1, !maximizing_player, switch_color);
         } else {
             curr_move = minimaxProcess(adjusted_board, new_move, depth-1, !maximizing_player, switch_color);
         }
-        if (depth == 4) {
-            char file_source = new_move.file_source + 97;
-            char rank_source = new_move.rank_source + 49;
-            char file_dest = new_move.file_dest + 97;
-            char rank_dest = new_move.rank_dest + 49;
+        // if (depth == 4) {
+        //     char file_source = new_move.file_source + 97;
+        //     char rank_source = new_move.rank_source + 49;
+        //     char file_dest = new_move.file_dest + 97;
+        //     char rank_dest = new_move.rank_dest + 49;
 
-            cout << file_source << rank_source << file_dest << rank_dest << ": " << curr_move.score << endl;
-        }
+        //     cout << file_source << rank_source << file_dest << rank_dest << ": " << curr_move.score << endl;
+        // }
 
         if (maximizing_player && (curr_move.score > best_move.score)) {
             best_move = new_move;
@@ -257,8 +260,8 @@ move_t ABMinMove(Chessboard* board, move_t move, short int depth, int a, int b, 
 }
 
 move_t findNextMove(Chessboard *board, move_t move, int depth, bool maximizing_player, Color color) {
-    // move_t best_move = minimaxProcess(board, move, depth, maximizing_player, color);
-    move_t best_move = seqMinimaxProcess(board, move, depth, maximizing_player, color);
+    move_t best_move = minimaxProcess(board, move, depth, maximizing_player, color);
+    // move_t best_move = seqMinimaxProcess(board, move, depth, maximizing_player, color);
 
     cout << "Total number of moves : " << number_of_moves << endl;
     return best_move;
